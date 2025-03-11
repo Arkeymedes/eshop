@@ -55,7 +55,7 @@ public class EshopOrderServlet extends HttpServlet {
  
                // Create a transaction record
                String insertSql = "INSERT INTO order_records (id, qty_ordered, cust_name, cust_phone, cust_email) VALUES ("
-                  + id + ", 1, '" + custName + "', '" + custPhone + "', '" + custEmail + "')";
+                  + ids + ", 1, '" + custName + "', '" + custPhone + "', '" + custEmail + "')";
                out.println("<p>" + insertSql + "</p>");
                count = stmt.executeUpdate(insertSql);
                out.println("<p>" + count + " record inserted.</p>");
