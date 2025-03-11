@@ -59,15 +59,28 @@ public class EshopQueryServlet extends HttpServlet {
          // Print the <form> start tag
          out.println("<form method='get' action='eshoporder'>");
          
-         // For each row in ResultSet, print one checkbox inside the <form>
-         while(rset.next()) {
-            out.println("<p><input type='checkbox' name='id' value="
-                  + "'" + rset.getString("id") + "' />"
-                  + rset.getString("author") + ", "
-                  + rset.getString("title") + ", $"
-                  + rset.getString("price") + "</p>");
+         // Start HTML table
+         out.println("<table border='1'>");
+         out.println("<tr>");
+         out.println("<th>Select</th>");
+         out.println("<th>Author</th>");
+         out.println("<th>Title</th>");
+         out.println("<th>Price</th>");
+         out.println("</tr>");
+
+         // For each row in ResultSet, print a table row
+         while (rset.next()) {
+            out.println("<tr>");
+            out.println("<td><input type='checkbox' name='id' value='" + rset.getString("id") + "' /></td>");
+            out.println("<td>" + rset.getString("author") + "</td>");
+            out.println("<td>" + rset.getString("title") + "</td>");
+            out.println("<td>$" + rset.getString("price") + "</td>");
+            out.println("</tr>");
          }
 
+         // Close the table
+         out.println("</table>");
+         
          out.println("<p>Enter your Name: <input type='text' name='cust_name' /></p>");
          out.println("<p>Enter your Email: <input type='text' name='cust_email' /></p>");
          out.println("<p>Enter your Phone Number: <input type='text' name='cust_phone' /></p>");
