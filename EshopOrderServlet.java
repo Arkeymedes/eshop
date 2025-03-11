@@ -1,9 +1,10 @@
+// To save as "ebookshop\WEB-INF\classes\QueryServlet.java".
 import java.io.*;
 import java.sql.*;
-import jakarta.servlet.*;             // Tomcat 10
+import jakarta.servlet.*;            // Tomcat 10 (Jakarta EE 9)
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-//import javax.servlet.*;             // Tomcat 9
+//import javax.servlet.*;            // Tomcat 9 (Java EE 8 / Jakarta EE 8)
 //import javax.servlet.http.*;
 //import javax.servlet.annotation.*;
 
@@ -16,19 +17,14 @@ public class EshopOrderServlet extends HttpServlet {
                throws ServletException, IOException {
       // Set the MIME type for the response message
       response.setContentType("text/html");
-      // Get an output writer to write the response message into the network socket
+      // Get a output writer to write the response message into the network socket
       PrintWriter out = response.getWriter();
-
       // Print an HTML page as the output of the query
-      out.println("""
-         <!DOCTYPE html>
-         <html>
-         <head>
-           <title>Query Response</title>
-         </head>
-         <body>
-         """);   // using triple-quoted multi-line String
-         
+      out.println("<!DOCTYPE html>");
+      out.println("<html>");
+      out.println("<head><title>Query Response</title></head>");
+      out.println("<body>");
+
       try (
          // Step 1: Allocate a database 'Connection' object
          Connection conn = DriverManager.getConnection(
@@ -42,7 +38,10 @@ public class EshopOrderServlet extends HttpServlet {
          // Step 3 & 4: Execute a SQL SELECT query and Process the query result
          // Retrieve the books' id. Can order more than one books.
          String[] ids = request.getParameterValues("id");
-         if (ids != null) {
+         String custName = request.getParameter("cust_name");
+         String custPhone = request.getParameter("cust_phone");
+         String custEmail = request.getParameter("cust_email");
+         if (ids != null && custName != null && custPhone != null && custEmail != null) {
             String sqlStr;
             int count;
  
@@ -55,21 +54,18 @@ public class EshopOrderServlet extends HttpServlet {
                out.println("<p>" + count + " record updated.</p>");
  
                // Create a transaction record
-               sqlStr = "INSERT INTO order_records (id, qty_ordered) VALUES ("
-                     + ids[i] + ", 1)";
-               out.println("<p>" + sqlStr + "</p>");  // for debugging
-               count = stmt.executeUpdate(sqlStr);
+               String insertSql = "INSERT INTO order_records (id, qty_ordered, cust_name, cust_phone, cust_email) VALUES ("
+                  + id + ", 1, '" + custName + "', '" + custPhone + "', '" + custEmail + "')";
+               out.println("<p>" + insertSql + "</p>");
+               count = stmt.executeUpdate(insertSql);
                out.println("<p>" + count + " record inserted.</p>");
-               out.println("<h3>Your order for book id=" + ids[i]
-                     + " has been confirmed.</h3>");
             }
             out.println("<h3>Thank you.<h3>");
          } else { // No book selected
             out.println("<h3>Please go back and select a book...</h3>");
          }
-
       } catch(SQLException ex) {
-         out.println("<p>Error: " + ex.getMessage() + "</p>");  // for debugging
+         out.println("<p>Error: " + ex.getMessage() + "</p>");
          out.println("<p>Check Tomcat console for details.</p>");
          ex.printStackTrace();
       }  // Step 5: Close conn and stmt - Done automatically by try-with-resources (JDK 7)
