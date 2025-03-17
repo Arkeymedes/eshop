@@ -251,5 +251,40 @@
             <p>&copy; 2025 Tarence Yong and Ryan Lim. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the authors form
+            const authorsForm = document.querySelector('.authors-container form');
+
+        // Add submit event listener to the authors form
+            authorsForm.addEventListener('submit', function(event) {
+        // Get all checked author checkboxes
+            const checkedAuthors = document.querySelectorAll('.authors-container input[name="author"]:checked');
+        
+        // If no authors are selected, prevent form submission and show an alert
+            if (checkedAuthors.length === 0) {
+                event.preventDefault();
+                alert('Please select at least one author before submitting.');
+            }
+        });
+
+        // Get the genres form
+            const genresForm = document.querySelector('.genres-container form');
+
+        // Add submit event listener to the genres form
+            genresForm.addEventListener('submit', function(event) {
+
+        // Get all checked genre checkboxes
+            const checkedGenres = document.querySelectorAll('.genres-container input[name="genre"]:checked');
+        
+        // If no genres are selected, prevent form submission and show an alert
+            if (checkedGenres.length === 0) {
+                event.preventDefault();
+            alert('Please select at least one genre before submitting.');
+            }
+        });
+    });
+    </script>
 </body>
 </html>
